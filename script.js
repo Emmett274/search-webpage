@@ -109,8 +109,12 @@ async function addDiscount(event) {
     // 顯示成功消息
     alert("優惠新增成功！");
 
-    // 直接跳轉到首頁
-    window.location.href = "index.html";
+    // 等待一小段時間確保數據保存完成
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // 使用 location.assign 進行跳轉
+    console.log("準備跳轉到首頁...");
+    location.assign("index.html");
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
