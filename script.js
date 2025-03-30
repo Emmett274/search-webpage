@@ -1,12 +1,12 @@
 // Firebase 配置
 const firebaseConfig = {
-  apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
-  authDomain: "discount-hunter-xxxxx.firebaseapp.com",
-  databaseURL: "https://discount-hunter-xxxxx-default-rtdb.firebaseio.com",
-  projectId: "discount-hunter-xxxxx",
-  storageBucket: "discount-hunter-xxxxx.appspot.com",
-  messagingSenderId: "xxxxxxxxxxxx",
-  appId: "1:xxxxxxxxxxxx:web:xxxxxxxxxxxxxxxxxxxxxxxx",
+  apiKey: "AIzaSyBbMs3BgV5QZEXLU91KeKj9mQj1vd5PwTM",
+  authDomain: "discount-hunter-733a8.firebaseapp.com",
+  projectId: "discount-hunter-733a8",
+  storageBucket: "discount-hunter-733a8.firebasestorage.app",
+  messagingSenderId: "774607292140",
+  appId: "1:774607292140:web:9dcc71a4592bb76ee9c7c9",
+  measurementId: "G-35Y27JMY5F",
 };
 
 // 初始化 Firebase
