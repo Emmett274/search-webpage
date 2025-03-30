@@ -108,7 +108,7 @@ async function addDiscount(event) {
     alert("優惠新增成功！");
 
     // 等待一小段時間確保 Firebase 操作完成
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // 使用多種方式嘗試跳轉
     console.log("準備跳轉到首頁...");
