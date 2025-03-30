@@ -97,15 +97,33 @@ async function addDiscount(event) {
       createdAt: firebase.database.ServerValue.TIMESTAMP,
     };
 
+    console.log("準備保存優惠數據...");
     // 保存到 Firebase 並等待完成
     await discountsRef.child(newDiscount.id).set(newDiscount);
+    console.log("優惠數據保存成功！");
 
     // 顯示成功消息
     alert("優惠新增成功！");
 
-    // 使用 location.assign 進行跳轉
+    // 使用多種方式嘗試跳轉
     console.log("準備跳轉到首頁...");
-    location.assign("index.html");
+    try {
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error("第一種跳轉方式失敗:", error);
+      try {
+        window.location.replace("index.html");
+      } catch (error) {
+        console.error("第二種跳轉方式失敗:", error);
+        try {
+          window.location = "index.html";
+        } catch (error) {
+          console.error("第三種跳轉方式失敗:", error);
+          // 如果所有跳轉方式都失敗，提供手動返回的提示
+          alert("跳轉失敗，請點擊確定後手動返回首頁");
+        }
+      }
+    }
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
