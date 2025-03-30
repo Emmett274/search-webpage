@@ -217,60 +217,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayDiscounts(discounts);
   });
 
-  // 綁定表單提交事件
-  const addForm = document.getElementById("addDiscountForm");
-  if (addForm) {
-    addForm.addEventListener("submit", addDiscount);
+  // 只在新增優惠頁面綁定表單提交事件
+  if (window.location.pathname.includes("add-discount.html")) {
+    const addForm = document.getElementById("addDiscountForm");
+    if (addForm) {
+      addForm.addEventListener("submit", addDiscount);
+    }
   }
 
-  // 綁定搜尋按鈕事件
-  const searchButton = document.getElementById("searchButton");
-  if (searchButton) {
-    searchButton.addEventListener("click", () => {
-      const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-        searchDiscounts(searchInput.value);
-      }
-    });
-  }
+  // 只在首頁綁定搜尋相關事件
+  if (
+    window.location.pathname.includes("index.html") ||
+    window.location.pathname === "/"
+  ) {
+    // 綁定搜尋按鈕事件
+    const searchButton = document.getElementById("searchButton");
+    if (searchButton) {
+      searchButton.addEventListener("click", () => {
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+          searchDiscounts(searchInput.value);
+        }
+      });
+    }
 
-  // 綁定搜尋輸入框事件（即時搜尋）
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      searchDiscounts(e.target.value);
-    });
-  }
+    // 綁定搜尋輸入框事件（即時搜尋）
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        searchDiscounts(e.target.value);
+      });
+    }
 
-  // 篩選面板相關代碼
-  const filterButton = document.getElementById("filterButton");
-  const filterPanel = document.getElementById("filterPanel");
+    // 篩選面板相關代碼
+    const filterButton = document.getElementById("filterButton");
+    const filterPanel = document.getElementById("filterPanel");
 
-  if (filterButton && filterPanel) {
-    filterButton.addEventListener("click", function () {
-      filterPanel.classList.toggle("hidden");
-      const icon = this.querySelector("i");
-      if (filterPanel.classList.contains("hidden")) {
-        icon.classList.remove("fa-times");
-        icon.classList.add("fa-filter");
-      } else {
-        icon.classList.remove("fa-filter");
-        icon.classList.add("fa-times");
-      }
-    });
+    if (filterButton && filterPanel) {
+      filterButton.addEventListener("click", function () {
+        filterPanel.classList.toggle("hidden");
+        const icon = this.querySelector("i");
+        if (filterPanel.classList.contains("hidden")) {
+          icon.classList.remove("fa-times");
+          icon.classList.add("fa-filter");
+        } else {
+          icon.classList.remove("fa-filter");
+          icon.classList.add("fa-times");
+        }
+      });
 
-    // 點擊面板外部關閉
-    document.addEventListener("click", function (event) {
-      if (
-        !filterPanel.contains(event.target) &&
-        !filterButton.contains(event.target)
-      ) {
-        filterPanel.classList.add("hidden");
-        const icon = filterButton.querySelector("i");
-        icon.classList.remove("fa-times");
-        icon.classList.add("fa-filter");
-      }
-    });
+      // 點擊面板外部關閉
+      document.addEventListener("click", function (event) {
+        if (
+          !filterPanel.contains(event.target) &&
+          !filterButton.contains(event.target)
+        ) {
+          filterPanel.classList.add("hidden");
+          const icon = filterButton.querySelector("i");
+          icon.classList.remove("fa-times");
+          icon.classList.add("fa-filter");
+        }
+      });
+    }
   }
 });
 
