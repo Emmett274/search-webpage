@@ -107,8 +107,9 @@ async function addDiscount(event) {
     // 顯示成功消息
     alert("優惠新增成功！");
 
-    // 直接跳轉到首頁
-    window.location.href = "./index.html";
+    // 使用 location.replace 進行跳轉
+    console.log("準備跳轉到首頁...");
+    location.replace("index.html");
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
