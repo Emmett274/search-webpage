@@ -101,50 +101,15 @@ async function addDiscount(event) {
 
     console.log("準備保存優惠數據...", newDiscount);
 
-    // 檢查 Firebase 連接狀態
-    if (!firebase.apps.length) {
-      console.error("Firebase 未初始化");
-      throw new Error("Firebase 未初始化");
-    }
-
     // 保存到 Firebase 並等待完成
-    try {
-      await discountsRef.child(newDiscount.id).set(newDiscount);
-      console.log("優惠數據保存成功！");
-    } catch (firebaseError) {
-      console.error("Firebase 保存錯誤:", firebaseError);
-      throw firebaseError;
-    }
+    await discountsRef.child(newDiscount.id).set(newDiscount);
+    console.log("優惠數據保存成功！");
 
     // 顯示成功消息
     alert("優惠新增成功！");
 
-    // 等待一小段時間確保數據保存完成
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // 使用多種方式嘗試跳轉
-    console.log("準備跳轉到首頁...");
-    try {
-      // 先嘗試使用 history API
-      history.pushState({}, "", "index.html");
-      window.location.reload();
-    } catch (error) {
-      console.error("第一種跳轉方式失敗:", error);
-      try {
-        // 如果失敗，嘗試直接跳轉
-        window.location.href = "index.html";
-      } catch (error) {
-        console.error("第二種跳轉方式失敗:", error);
-        try {
-          // 最後嘗試使用 replace
-          window.location.replace("index.html");
-        } catch (error) {
-          console.error("第三種跳轉方式失敗:", error);
-          // 如果所有跳轉方式都失敗，提供手動返回的提示
-          alert("跳轉失敗，請點擊確定後手動返回首頁");
-        }
-      }
-    }
+    // 直接跳轉到首頁
+    window.location.href = "index.html";
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
