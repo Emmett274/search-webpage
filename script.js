@@ -1,8 +1,4 @@
-// Firebase 數據庫引用
-const database = firebase.database();
-const discountsRef = database.ref("discounts");
-
-// 初始化 Firebase
+// Firebase 配置
 const firebaseConfig = {
   apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
   authDomain: "discount-hunter-xxxxx.firebaseapp.com",
@@ -15,26 +11,32 @@ const firebaseConfig = {
 
 // 初始化 Firebase
 firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const discountsRef = database.ref("discounts");
 
 // 顯示優惠列表
 function displayDiscounts(discounts) {
   const searchResults = document.getElementById("searchResults");
   if (!searchResults) return;
 
-  // 保留標題
-  const title = searchResults.querySelector(".section-title");
-  searchResults.innerHTML = "";
-  if (title) {
-    searchResults.appendChild(title);
+  // 清空現有內容
+  searchResults.innerHTML = '<h2 class="section-title">熱門優惠</h2>';
+
+  if (!discounts || Object.keys(discounts).length === 0) {
+    searchResults.innerHTML += '<p class="no-results">暫無優惠資訊</p>';
+    return;
   }
 
+  // 將優惠轉換為數組並按創建時間排序
+  const discountsArray = Object.values(discounts).sort(
+    (a, b) => b.createdAt - a.createdAt
+  );
+
   // 顯示優惠卡片
-  Object.values(discounts)
-    .reverse()
-    .forEach((discount) => {
-      const card = createDiscountCard(discount);
-      searchResults.appendChild(card);
-    });
+  discountsArray.forEach((discount) => {
+    const card = createDiscountCard(discount);
+    searchResults.appendChild(card);
+  });
 }
 
 // 創建優惠卡片
@@ -105,18 +107,25 @@ async function addDiscount(event) {
     // 顯示成功消息
     alert("優惠新增成功！");
 
+    // 等待一小段時間確保 Firebase 操作完成
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     // 使用多種方式嘗試跳轉
     console.log("準備跳轉到首頁...");
     try {
-      window.location.href = "index.html";
+      // 先嘗試使用 history API
+      history.pushState({}, "", "index.html");
+      window.location.reload();
     } catch (error) {
       console.error("第一種跳轉方式失敗:", error);
       try {
-        window.location.replace("index.html");
+        // 如果失敗，嘗試直接跳轉
+        window.location.href = "index.html";
       } catch (error) {
         console.error("第二種跳轉方式失敗:", error);
         try {
-          window.location = "index.html";
+          // 最後嘗試使用 replace
+          window.location.replace("index.html");
         } catch (error) {
           console.error("第三種跳轉方式失敗:", error);
           // 如果所有跳轉方式都失敗，提供手動返回的提示
@@ -182,40 +191,29 @@ function searchDiscounts(keyword) {
 // 頁面載入時顯示優惠
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    console.log("開始獲取優惠數據...");
     // 獲取所有優惠數據
     const snapshot = await discountsRef.once("value");
-    const discounts = [];
-    snapshot.forEach((childSnapshot) => {
-      discounts.push({
-        id: childSnapshot.key,
-        ...childSnapshot.val(),
-      });
-    });
-
-    // 按創建時間排序（最新的在前）
-    discounts.sort((a, b) => b.createdAt - a.createdAt);
+    const discounts = snapshot.val() || {};
+    console.log("獲取到的優惠數據:", discounts);
 
     // 更新搜尋結果區域
-    const searchResults = document.getElementById("searchResults");
-    if (searchResults) {
-      // 清空現有內容
-      searchResults.innerHTML = '<h2 class="section-title">熱門優惠</h2>';
+    displayDiscounts(discounts);
 
-      // 添加優惠卡片
-      discounts.forEach((discount) => {
-        const discountCard = createDiscountCard(discount);
-        searchResults.appendChild(discountCard);
-      });
-    }
+    // 監聽數據變化
+    discountsRef.on("value", (snapshot) => {
+      const updatedDiscounts = snapshot.val() || {};
+      console.log("數據更新:", updatedDiscounts);
+      displayDiscounts(updatedDiscounts);
+    });
   } catch (error) {
     console.error("Error fetching discounts:", error);
+    const searchResults = document.getElementById("searchResults");
+    if (searchResults) {
+      searchResults.innerHTML =
+        '<h2 class="section-title">熱門優惠</h2><p class="error-message">載入優惠資訊失敗，請稍後再試</p>';
+    }
   }
-
-  // 監聽數據變化
-  discountsRef.on("value", (snapshot) => {
-    const discounts = snapshot.val() || {};
-    displayDiscounts(discounts);
-  });
 
   // 只在新增優惠頁面綁定表單提交事件
   if (window.location.pathname.includes("add-discount.html")) {
