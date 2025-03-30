@@ -3,87 +3,199 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新增優惠</title>
+    <title>新增優惠 - DISCOUNT HUNTER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
+    <style>
+      .form-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .form-card {
+        background-color: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .submit-button {
+        flex: 1;
+        padding: 12px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .submit-button:hover {
+        background-color: #357abd;
+      }
+
+      .cancel-button {
+        flex: 1;
+        padding: 12px;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .cancel-button:hover {
+        background-color: var(--hover-color);
+      }
+
+      @media (max-width: 768px) {
+        .form-container {
+          padding: 12px;
+        }
+
+        .form-card {
+          padding: 16px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>新增優惠</h1>
-        <a href="DISCOUNT 測試.html" class="back-button">返回首頁</a>
+        <h1>DISCOUNT HUNTER</h1>
       </header>
 
       <div class="form-container">
-        <form onsubmit="event.preventDefault(); addNewContent();">
+        <form id="addDiscountForm" class="form-card">
           <div class="form-group">
-            <label for="titleInput">標題：</label>
-            <input type="text" id="titleInput" required />
-          </div>
-          <div class="form-group">
-            <label for="typeInput">類型：</label>
-            <select id="typeInput" required>
-              <option value="折扣">折扣</option>
-              <option value="套餐">套餐</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="priceInput">價格：</label>
-            <input type="number" id="priceInput" min="0" required />
-          </div>
-          <div class="form-group">
-            <label for="startDate">開始日期：</label>
-            <input type="date" id="startDate" required />
-          </div>
-          <div class="form-group">
-            <label for="endDate">結束日期：</label>
-            <input type="date" id="endDate" required />
-          </div>
-          <div class="form-group">
-            <label for="locationInput">地點：</label>
-            <input type="text" id="locationInput" required />
-          </div>
-          <div class="form-group">
-            <label for="descriptionInput">描述：</label>
-            <textarea id="descriptionInput" required></textarea>
-          </div>
-          <div class="form-group">
-            <label for="imageInput">圖片：</label>
-            <input type="file" id="imageInput" accept="image/*" />
-            <div id="imagePreview" class="image-preview"></div>
-          </div>
-          <div class="form-group">
-            <label for="tagsInput">標籤：</label>
+            <label for="title">優惠標題</label>
             <input
               type="text"
-              id="tagsInput"
-              placeholder="輸入標籤後按 Enter"
+              id="title"
+              name="title"
+              required
+              placeholder="請輸入優惠標題"
             />
-            <div id="tagsList" class="tags-list"></div>
           </div>
+
           <div class="form-group">
-            <label>通知設定：</label>
-            <div class="checkbox-group">
-              <label>
-                <input type="checkbox" id="notifyStart" />
-                活動開始時通知
-              </label>
-              <label>
-                <input type="checkbox" id="notifyEnd" />
-                活動結束時通知
-              </label>
-            </div>
+            <label for="description">優惠描述</label>
+            <textarea
+              id="description"
+              name="description"
+              required
+              placeholder="請輸入優惠詳細內容"
+            ></textarea>
           </div>
-          <div class="form-buttons">
-            <button type="submit" id="submitButton" class="primary-button">
-              提交
-            </button>
-            <button type="button" id="cancelButton" class="secondary-button">
-              取消
-            </button>
+
+          <div class="form-group">
+            <label for="tag">優惠類型</label>
+            <select id="tag" name="tag" required>
+              <option value="">請選擇優惠類型</option>
+              <option value="限時優惠">限時優惠</option>
+              <option value="信用卡優惠">信用卡優惠</option>
+              <option value="購物優惠">購物優惠</option>
+              <option value="餐飲優惠">餐飲優惠</option>
+              <option value="娛樂優惠">娛樂優惠</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="date">優惠期限</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+
+          <div class="form-group">
+            <label for="location">適用地點</label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              required
+              placeholder="請輸入適用地點"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="category">優惠分類</label>
+            <select id="category" name="category" required>
+              <option value="">請選擇優惠分類</option>
+              <option value="飲品">飲品</option>
+              <option value="餐飲">餐飲</option>
+              <option value="購物">購物</option>
+              <option value="信用卡">信用卡</option>
+              <option value="電影">電影</option>
+              <option value="娛樂">娛樂</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="submit-button">新增優惠</button>
+            <a href="index.html" class="cancel-button">取消</a>
           </div>
         </form>
       </div>
