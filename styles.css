@@ -185,9 +185,9 @@ button:hover {
 }
 
 .search-results {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-top: 20px;
 }
 
@@ -214,6 +214,17 @@ button:hover {
   .filter-container {
     flex-direction: column;
   }
+
+  .discount-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .discount-header {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
 .discount-card {
@@ -223,20 +234,28 @@ button:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid var(--border-color);
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
 }
 
 .discount-card:hover {
-  transform: translateY(-4px);
+  transform: translateX(4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .discount-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.discount-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .discount-tag {
@@ -272,7 +291,7 @@ button:hover {
   gap: 16px;
   color: var(--text-secondary);
   font-size: 12px;
-  margin-top: auto;
+  margin-top: 8px;
 }
 
 .discount-location,
