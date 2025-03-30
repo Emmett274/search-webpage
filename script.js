@@ -2,6 +2,20 @@
 const database = firebase.database();
 const discountsRef = database.ref("discounts");
 
+// 初始化 Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx",
+  authDomain: "discount-hunter-xxxxx.firebaseapp.com",
+  databaseURL: "https://discount-hunter-xxxxx-default-rtdb.firebaseio.com",
+  projectId: "discount-hunter-xxxxx",
+  storageBucket: "discount-hunter-xxxxx.appspot.com",
+  messagingSenderId: "xxxxxxxxxxxx",
+  appId: "1:xxxxxxxxxxxx:web:xxxxxxxxxxxxxxxxxxxxxxxx",
+};
+
+// 初始化 Firebase
+firebase.initializeApp(firebaseConfig);
+
 // 顯示優惠列表
 function displayDiscounts(discounts) {
   const searchResults = document.getElementById("searchResults");
@@ -29,10 +43,17 @@ function createDiscountCard(discount) {
   card.href = `discount-detail.html?id=${discount.id}`;
   card.className = "discount-card";
 
+  const date = new Date(discount.date);
+  const formattedDate = date.toLocaleDateString("zh-TW", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
   card.innerHTML = `
     <div class="discount-header">
       <span class="discount-tag">${discount.tag}</span>
-      <span class="discount-date">${discount.date}</span>
+      <span class="discount-date">${formattedDate}</span>
     </div>
     <div class="discount-content">
       <h3 class="discount-title">${discount.title}</h3>
@@ -141,7 +162,37 @@ function searchDiscounts(keyword) {
 }
 
 // 頁面載入時顯示優惠
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // 獲取所有優惠數據
+    const snapshot = await discountsRef.once("value");
+    const discounts = [];
+    snapshot.forEach((childSnapshot) => {
+      discounts.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val(),
+      });
+    });
+
+    // 按創建時間排序（最新的在前）
+    discounts.sort((a, b) => b.createdAt - a.createdAt);
+
+    // 更新搜尋結果區域
+    const searchResults = document.getElementById("searchResults");
+    if (searchResults) {
+      // 清空現有內容
+      searchResults.innerHTML = '<h2 class="section-title">熱門優惠</h2>';
+
+      // 添加優惠卡片
+      discounts.forEach((discount) => {
+        const discountCard = createDiscountCard(discount);
+        searchResults.appendChild(discountCard);
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching discounts:", error);
+  }
+
   // 監聽數據變化
   discountsRef.on("value", (snapshot) => {
     const discounts = snapshot.val() || {};
