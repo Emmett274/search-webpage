@@ -76,14 +76,15 @@ async function addDiscount(event) {
       createdAt: firebase.database.ServerValue.TIMESTAMP,
     };
 
-    // 保存到 Firebase
+    // 保存到 Firebase 並等待完成
     await discountsRef.child(newDiscount.id).set(newDiscount);
 
     // 顯示成功消息
     alert("優惠新增成功！");
 
-    // 重定向到首頁
-    window.location.href = "index.html";
+    // 使用 location.assign 進行跳轉
+    console.log("準備跳轉到首頁...");
+    location.assign("index.html");
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
