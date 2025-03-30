@@ -105,17 +105,30 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--accent-color);
-  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-button i {
+  font-size: 16px;
+  color: var(--accent-color);
 }
 
 .add-button:hover {
-  background-color: #357abd;
+  background-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+}
+
+.add-button:hover i {
+  color: var(--text-primary);
 }
 
 .filter-panel {
