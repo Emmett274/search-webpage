@@ -7,6 +7,7 @@ const firebaseConfig = {
   messagingSenderId: "774607292140",
   appId: "1:774607292140:web:9dcc71a4592bb76ee9c7c9",
   measurementId: "G-35Y27JMY5F",
+  databaseURL: "https://discount-hunter-733a8-default-rtdb.firebaseio.com",
 };
 
 // 初始化 Firebase
