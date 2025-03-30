@@ -57,19 +57,25 @@ function createDiscountCard(discount) {
 async function addDiscount(event) {
   event.preventDefault();
 
-  const form = event.target;
-  const newDiscount = {
-    id: Date.now().toString(),
-    tag: form.tag.value,
-    date: form.date.value,
-    title: form.title.value,
-    description: form.description.value,
-    location: form.location.value,
-    category: form.category.value,
-    createdAt: firebase.database.ServerValue.TIMESTAMP,
-  };
-
   try {
+    // 顯示載入中提示
+    const submitButton = event.target.querySelector(".submit-button");
+    const originalText = submitButton.textContent;
+    submitButton.textContent = "新增中...";
+    submitButton.disabled = true;
+
+    const form = event.target;
+    const newDiscount = {
+      id: Date.now().toString(),
+      tag: form.tag.value,
+      date: form.date.value,
+      title: form.title.value,
+      description: form.description.value,
+      location: form.location.value,
+      category: form.category.value,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    };
+
     // 保存到 Firebase
     await discountsRef.child(newDiscount.id).set(newDiscount);
 
@@ -81,6 +87,11 @@ async function addDiscount(event) {
   } catch (error) {
     console.error("Error adding discount:", error);
     alert("新增優惠失敗，請稍後再試。");
+
+    // 恢復按鈕狀態
+    const submitButton = event.target.querySelector(".submit-button");
+    submitButton.textContent = "新增優惠";
+    submitButton.disabled = false;
   }
 }
 
