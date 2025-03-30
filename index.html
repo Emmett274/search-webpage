@@ -19,7 +19,14 @@
   <body>
     <div class="container">
       <header>
-        <h1>DISCOUNT HUNTER</h1>
+        <div class="header-content">
+          <h1>DISCOUNT HUNTER</h1>
+          <div class="auth-buttons">
+            <span id="userEmail" class="user-email"></span>
+            <button id="loginButton" class="auth-button">登錄</button>
+            <button id="logoutButton" class="auth-button hidden">登出</button>
+          </div>
+        </div>
         <div class="header-right">
           <div class="search-container">
             <input type="text" id="searchInput" placeholder="搜尋優惠..." />
@@ -162,6 +169,41 @@
       // 初始化 Firebase
       firebase.initializeApp(firebaseConfig);
       const analytics = firebase.analytics();
+
+      // 監聽登錄狀態變化
+      auth.onAuthStateChanged((user) => {
+        const loginButton = document.getElementById("loginButton");
+        const logoutButton = document.getElementById("logoutButton");
+        const userEmail = document.getElementById("userEmail");
+
+        if (user) {
+          loginButton.classList.add("hidden");
+          logoutButton.classList.remove("hidden");
+          userEmail.textContent = user.email;
+        } else {
+          loginButton.classList.remove("hidden");
+          logoutButton.classList.add("hidden");
+          userEmail.textContent = "";
+        }
+      });
+
+      // 登錄按鈕點擊事件
+      document.getElementById("loginButton").addEventListener("click", () => {
+        window.location.href = "login.html";
+      });
+
+      // 登出按鈕點擊事件
+      document
+        .getElementById("logoutButton")
+        .addEventListener("click", async () => {
+          try {
+            await auth.signOut();
+            window.location.reload();
+          } catch (error) {
+            console.error("登出錯誤:", error);
+            alert("登出失敗：" + error.message);
+          }
+        });
     </script>
   </body>
 </html>

@@ -13,6 +13,7 @@ const firebaseConfig = {
 // 初始化 Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const auth = firebase.auth();
 const discountsRef = database.ref("discounts");
 
 // 顯示優惠列表
@@ -77,11 +78,28 @@ function createDiscountCard(discount) {
   return card;
 }
 
+// 檢查用戶登錄狀態
+function checkAuth() {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      unsubscribe();
+      if (user) {
+        resolve(user);
+      } else {
+        reject(new Error("用戶未登錄"));
+      }
+    });
+  });
+}
+
 // 添加新優惠
 async function addDiscount(event) {
   event.preventDefault();
 
   try {
+    // 檢查用戶是否登錄
+    await checkAuth();
+
     // 顯示載入中提示
     const submitButton = event.target.querySelector(".submit-button");
     const originalText = submitButton.textContent;
@@ -117,7 +135,11 @@ async function addDiscount(event) {
     location.assign("index.html");
   } catch (error) {
     console.error("Error adding discount:", error);
-    alert("新增優惠失敗，請稍後再試。");
+    if (error.message === "用戶未登錄") {
+      alert("請先登錄後再新增優惠");
+    } else {
+      alert("新增優惠失敗，請稍後再試。");
+    }
 
     // 恢復按鈕狀態
     const submitButton = event.target.querySelector(".submit-button");
